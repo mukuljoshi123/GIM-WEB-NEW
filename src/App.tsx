@@ -1,35 +1,103 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Menu } from 'antd'
 import './App.css'
+import { Route, Routes, useNavigate } from 'react-router-dom'
+import { DashboardOutlined, HomeOutlined, PoweroffOutlined, ProfileOutlined, UnorderedListOutlined } from '@ant-design/icons'
+import { useState } from 'react'
+import GuestPage from './presentation/GuestPage'
+import GuestHeader from './presentation/GuestHeader'
+import SignIn from './presentation/SignIn'
+import SignUp from './presentation/SignUp'
+import LoginWithOtp from './presentation/LoginWithOtp'
+import ValidateOtp from './presentation/ValidateOtp'
+import ProfileDetails from './presentation/ProfileDetails'
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [isAuthenticate, setIsAuthenticate] = useState(true);
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-           this ismy count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className='app_container'>
+      {!isAuthenticate && <GuestHeader />}
+      {isAuthenticate && <div className='app_main_content'>
+        <SideMenu />
+        <Content />
+      </div>}
+      {!isAuthenticate && <div className='app_main_content'>
+        <GuestContent />
+      </div>}
+      <Footer />
+    </div>
+
   )
 }
+
+function Header() {
+  return (
+    <div className='app_header'> Header</div>
+  )
+}
+
+function SideMenu() {
+  const navigate = useNavigate();
+  const onClickMenuItem = (menuKey: string) => {
+    navigate(menuKey)
+  }
+  return (
+    <Menu
+      mode="inline"
+      className='app_sideMenu'
+      defaultSelectedKeys={[window.location.pathname]}
+      onClick={({ key }) => onClickMenuItem(key)}
+      items={[{ label: "Home", icon: <HomeOutlined />, key: "/home" },
+      { label: "Dashboard", icon: <DashboardOutlined />, key: "/dashboard" },
+      {
+        label: "Users", icon: <UnorderedListOutlined />, key: "/usersList",
+        children: [
+          { label: 'Active Users', key: "/activeUsers" },
+          { label: 'Pending Users', key: "/pendingUsers" },
+          { label: 'In Active Users', key: "/inactiveUsers" },
+        ]
+      },
+      { label: "Profile", icon: <ProfileOutlined />, key: "/profile" },
+      { label: "Signout", icon: <PoweroffOutlined />, danger: true, key: 'signout' }
+      ]}
+    ></Menu>
+  )
+}
+
+function Content() {
+  return <div>
+    <Routes>
+      <Route path="/home" element={<div>Home</div>}></Route>
+      <Route path="/dashboard" element={<div>Dashboard</div>}></Route>
+      <Route path="/activeUsers" element={<div>Active UserList</div>}></Route>
+      <Route path="/pendingUsers" element={<div>Pending UserList</div>}></Route>
+      <Route path="/inactiveUsers" element={<div>In Active UserList</div>}></Route>
+      <Route path="/profile" element={<div>Profile</div>}></Route>
+    </Routes>
+  </div>
+}
+
+function GuestContent() {
+
+  return <div>
+    <Routes>
+      <Route path="/" element={<GuestPage />}></Route>
+      <Route path="/singup" element={<SignUp/>}></Route>
+      <Route path="/singnin" element={<SignIn/>}></Route>
+      <Route path="/loginwithotp" element={<LoginWithOtp/>}></Route>
+      <Route path="/otpverification" element={<ValidateOtp/>}></Route>
+      <Route path="/profiledetails" element={<ProfileDetails/>}></Route>
+      <Route path="/pendingUsers" element={<div>Pending UserList</div>}></Route>
+      <Route path="/inactiveUsers" element={<div>In Active UserList</div>}></Route>
+      <Route path="/profile" element={<div>Profile</div>}></Route>
+    </Routes>
+  </div>
+}
+
+function Footer() {
+  return (
+    <div className='app_footer'>&copy; All Rights Reserve to MR Groups @2023</div>
+  )
+}
+
 
 export default App

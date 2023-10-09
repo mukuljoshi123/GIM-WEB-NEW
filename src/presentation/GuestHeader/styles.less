@@ -1,0 +1,40 @@
+@prefix: guestHeader__;
+
+
+.@{prefix}container {
+    .@{prefix}hamburger {
+        background-color: #D9D9D9;
+        height: 3rem;
+        padding-left: 1rem;
+        padding-top: 1rem;
+
+        .hamburger_icon {
+            font-size: 2rem;
+        }
+    }
+
+    .@{prefix}menuItem {
+        padding: 1rem 0rem 1rem 0rem;
+        background-color: #D9D9D9;
+        font-size: 1.5rem;
+        border: none;
+    }
+}
+
+
+@media screen and (max-width: 480px) {
+    .header_menu {
+        display: none;
+    }
+
+    .@{prefix}hamburger {
+        display: block;
+    }
+}
+
+@media screen and (min-width: 480px) {
+
+    .@{prefix}hamburger {
+        display: none;
+    }
+}
